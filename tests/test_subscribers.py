@@ -6,6 +6,9 @@ pytestmark = pytest.mark.integration
 
 
 def test_sync(tm_client):
-    subscribers.sync(tm_client, [
-        {"email": "subscriber@ticketmatic.com", "subscribed": True},
-    ])
+    subscribers.sync(
+        tm_client,
+        [
+            {"email": "subscriber@ticketmatic.com", "subscribed": True},
+        ],
+    )

@@ -1,11 +1,22 @@
 """Unit tests for model serialization round-trips (no API calls needed)."""
+
 from datetime import datetime, timezone
 
 from ticketmatic.models.common import Address, BatchResult, BatchResultItem, Timestamp
-from ticketmatic.models.contact import Contact, ContactOptIn, ContactOptInInfo, ContactQuery
+from ticketmatic.models.contact import (
+    Contact,
+    ContactOptIn,
+    ContactOptInInfo,
+    ContactQuery,
+)
 from ticketmatic.models.event import Event, EventContingent, EventQuery
 from ticketmatic.models.order import Order, OrderTicket, Payment
-from ticketmatic.models.pricing import PriceType, TicketFee, TicketfeeRules, TicketfeeSaleschannelRule
+from ticketmatic.models.pricing import (
+    PriceType,
+    TicketFee,
+    TicketfeeRules,
+    TicketfeeSaleschannelRule,
+)
 from ticketmatic.models.product import Product, ProductInstancePricetypeValue
 from ticketmatic.models.seating import SeatingPlan
 from ticketmatic.models.voucher import Voucher, VoucherValidity
@@ -13,7 +24,9 @@ from ticketmatic.models.voucher import Voucher, VoucherValidity
 
 class TestContactRoundTrip:
     def test_basic_fields(self):
-        c = Contact.from_dict({"id": 1, "firstname": "John", "lastname": "Doe", "email": "j@test.com"})
+        c = Contact.from_dict(
+            {"id": 1, "firstname": "John", "lastname": "Doe", "email": "j@test.com"}
+        )
         assert c.id == 1
         assert c.firstname == "John"
         d = c.to_dict()
@@ -29,11 +42,13 @@ class TestContactRoundTrip:
         assert "custom_fields" not in d
 
     def test_nested_addresses(self):
-        c = Contact.from_dict({
-            "id": 1,
-            "addresses": [{"city": "Brussels", "countrycode": "BE"}],
-            "phonenumbers": [{"id": 1, "number": "+321234"}],
-        })
+        c = Contact.from_dict(
+            {
+                "id": 1,
+                "addresses": [{"city": "Brussels", "countrycode": "BE"}],
+                "phonenumbers": [{"id": 1, "number": "+321234"}],
+            }
+        )
         assert c.addresses[0].city == "Brussels"
         assert c.phonenumbers[0].number == "+321234"
         d = c.to_dict()
@@ -52,14 +67,18 @@ class TestContactRoundTrip:
         assert "email" not in d
 
     def test_optins(self):
-        c = Contact.from_dict({
-            "id": 1,
-            "optins": [{
-                "optinid": 1,
-                "status": 7602,
-                "info": {"method": "api", "remarks": "test"},
-            }],
-        })
+        c = Contact.from_dict(
+            {
+                "id": 1,
+                "optins": [
+                    {
+                        "optinid": 1,
+                        "status": 7602,
+                        "info": {"method": "api", "remarks": "test"},
+                    }
+                ],
+            }
+        )
         assert c.optins[0].optinid == 1
         assert c.optins[0].info.method == "api"
 
@@ -74,10 +93,12 @@ class TestEventRoundTrip:
         assert e.name == "Concert"
 
     def test_contingents(self):
-        e = Event.from_dict({
-            "id": 1,
-            "contingents": [{"id": 10, "name": "Main", "amount": 500}],
-        })
+        e = Event.from_dict(
+            {
+                "id": 1,
+                "contingents": [{"id": 10, "name": "Main", "amount": 500}],
+            }
+        )
         assert e.contingents[0].amount == 500
         assert isinstance(e.contingents[0], EventContingent)
 
@@ -93,13 +114,17 @@ class TestEventRoundTrip:
 
 class TestOrderRoundTrip:
     def test_nested_tickets_and_payments(self):
-        o = Order.from_dict({
-            "orderid": 100,
-            "tickets": [{"id": 1, "eventid": 5, "price": 25.50}],
-            "payments": [{"id": 1, "amount": 25.50, "paidts": "2024-06-01T10:00:00Z"}],
-            "totalamount": 25.50,
-            "c_note": "vip",
-        })
+        o = Order.from_dict(
+            {
+                "orderid": 100,
+                "tickets": [{"id": 1, "eventid": 5, "price": 25.50}],
+                "payments": [
+                    {"id": 1, "amount": 25.50, "paidts": "2024-06-01T10:00:00Z"}
+                ],
+                "totalamount": 25.50,
+                "c_note": "vip",
+            }
+        )
         assert o.orderid == 100
         assert o.tickets[0].price == 25.50
         assert isinstance(o.tickets[0], OrderTicket)
@@ -121,17 +146,29 @@ class TestPricingRoundTrip:
         assert d["c_color"] == "red"
 
     def test_ticket_fee_rules(self):
-        tf = TicketFee.from_dict({
-            "id": 1,
-            "name": "Fee",
-            "rules": {
-                "default": [{"saleschannelid": 1, "status": "fixedfee", "value": 2.50}],
-                "exceptions": [{
-                    "pricetypeid": 5,
-                    "saleschannels": [{"saleschannelid": 1, "status": "percentage", "value": 10}],
-                }],
-            },
-        })
+        tf = TicketFee.from_dict(
+            {
+                "id": 1,
+                "name": "Fee",
+                "rules": {
+                    "default": [
+                        {"saleschannelid": 1, "status": "fixedfee", "value": 2.50}
+                    ],
+                    "exceptions": [
+                        {
+                            "pricetypeid": 5,
+                            "saleschannels": [
+                                {
+                                    "saleschannelid": 1,
+                                    "status": "percentage",
+                                    "value": 10,
+                                }
+                            ],
+                        }
+                    ],
+                },
+            }
+        )
         assert tf.rules.default[0].value == 2.50
         assert tf.rules.exceptions[0].pricetypeid == 5
 
@@ -149,25 +186,31 @@ class TestProductRoundTrip:
 
 class TestSeatingRoundTrip:
     def test_basic(self):
-        sp = SeatingPlan.from_dict({"id": 1, "name": "Main Hall", "useszones": True, "zones": [1, 2]})
+        sp = SeatingPlan.from_dict(
+            {"id": 1, "name": "Main Hall", "useszones": True, "zones": [1, 2]}
+        )
         assert sp.useszones is True
         assert sp.zones == [1, 2]
 
 
 class TestVoucherRoundTrip:
     def test_validity(self):
-        v = Voucher.from_dict({
-            "id": 1,
-            "name": "Gift",
-            "validity": {"expiry_monthsaftercreation": 12, "maxusages": 5},
-        })
+        v = Voucher.from_dict(
+            {
+                "id": 1,
+                "name": "Gift",
+                "validity": {"expiry_monthsaftercreation": 12, "maxusages": 5},
+            }
+        )
         assert v.validity.expiry_monthsaftercreation == 12
         assert v.validity.maxusages == 5
 
 
 class TestQueryModels:
     def test_contact_query(self):
-        q = ContactQuery.from_dict({"filter": "select id from tm.contact", "limit": 10, "offset": 0})
+        q = ContactQuery.from_dict(
+            {"filter": "select id from tm.contact", "limit": 10, "offset": 0}
+        )
         assert q.filter == "select id from tm.contact"
         assert q.limit == 10
 
@@ -182,13 +225,15 @@ class TestCommonModels:
         assert isinstance(ts.systemtime, datetime)
 
     def test_batch_result(self):
-        br = BatchResult.from_dict({
-            "nbrsucceeded": 2,
-            "results": [
-                {"id": 1, "succeeded": True},
-                {"id": 2, "succeeded": False, "msg": "error"},
-            ],
-        })
+        br = BatchResult.from_dict(
+            {
+                "nbrsucceeded": 2,
+                "results": [
+                    {"id": 1, "succeeded": True},
+                    {"id": 2, "succeeded": False, "msg": "error"},
+                ],
+            }
+        )
         assert br.nbrsucceeded == 2
         assert br.results[1].msg == "error"
 

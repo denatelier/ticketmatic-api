@@ -11,9 +11,12 @@ def test_info(tm_client):
 
 
 def test_queries(tm_client):
-    result = tools.queries(tm_client, {
-        "limit": 2,
-        "query": "SELECT * FROM tm.paymentscenario",
-    })
+    result = tools.queries(
+        tm_client,
+        {
+            "limit": 2,
+            "query": "SELECT * FROM tm.paymentscenario",
+        },
+    )
     assert result.nbrofresults > 1
     assert len(result.results) == 2

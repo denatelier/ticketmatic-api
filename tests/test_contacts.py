@@ -1,7 +1,11 @@
 import pytest
 
 from ticketmatic.endpoints import contacts
-from ticketmatic.endpoints.settings.system import contact_address_types, contact_titles, phone_number_types
+from ticketmatic.endpoints.settings.system import (
+    contact_address_types,
+    contact_titles,
+    phone_number_types,
+)
 from ticketmatic.models.contact import ContactGetQuery, ContactQuery
 
 pytestmark = pytest.mark.integration
@@ -23,11 +27,14 @@ def test_batch(tm_client):
     c2 = contacts.create(tm_client, {"firstname": "Bob"})
     assert c2.id != 0
 
-    contacts.batch(tm_client, {
-        "ids": [c1.id],
-        "operation": "update",
-        "parameters": {"fields": {"languagecode": "EN"}},
-    })
+    contacts.batch(
+        tm_client,
+        {
+            "ids": [c1.id],
+            "operation": "update",
+            "parameters": {"fields": {"languagecode": "EN"}},
+        },
+    )
 
 
 def test_create(tm_client):
@@ -53,26 +60,31 @@ def test_create_custom(tm_client):
     ptypes = phone_number_types.get_list(tm_client)
     assert len(ptypes.data) > 1
 
-    contact = contacts.create(tm_client, {
-        "addresses": [{
-            "city": "Nieuwerkerk Aan Den Ijssel",
-            "countrycode": "NL",
-            "street1": "Kerkstraat",
-            "street2": "1",
-            "typeid": addrtypes.data[0].id,
-            "zip": "2914 AH",
-        }],
-        "birthdate": "1959-09-21",
-        "customertitleid": titles.data[0].id,
-        "email": "john@worldonline.nl",
-        "firstname": "John",
-        "lastname": "Johns",
-        "middlename": "J",
-        "phonenumbers": [
-            {"number": "+31222222222", "typeid": ptypes.data[0].id},
-            {"number": "+31222222222", "typeid": ptypes.data[1].id},
-        ],
-    })
+    contact = contacts.create(
+        tm_client,
+        {
+            "addresses": [
+                {
+                    "city": "Nieuwerkerk Aan Den Ijssel",
+                    "countrycode": "NL",
+                    "street1": "Kerkstraat",
+                    "street2": "1",
+                    "typeid": addrtypes.data[0].id,
+                    "zip": "2914 AH",
+                }
+            ],
+            "birthdate": "1959-09-21",
+            "customertitleid": titles.data[0].id,
+            "email": "john@worldonline.nl",
+            "firstname": "John",
+            "lastname": "Johns",
+            "middlename": "J",
+            "phonenumbers": [
+                {"number": "+31222222222", "typeid": ptypes.data[0].id},
+                {"number": "+31222222222", "typeid": ptypes.data[1].id},
+            ],
+        },
+    )
 
     assert contact.id != 0
     assert contact.firstname == "John"
@@ -83,11 +95,14 @@ def test_create_custom(tm_client):
 
 
 def test_create_unicode(tm_client):
-    contact = contacts.create(tm_client, {
-        "email": "john@test.com",
-        "firstname": "JØhñ",
-        "lastname": "ポテト 👌 ไก่",
-    })
+    contact = contacts.create(
+        tm_client,
+        {
+            "email": "john@test.com",
+            "firstname": "JØhñ",
+            "lastname": "ポテト 👌 ไก่",
+        },
+    )
     assert contact.id != 0
     assert contact.firstname == "JØhñ"
     assert contact.lastname == "ポテト 👌 ไก่"
@@ -119,10 +134,13 @@ def test_archived(tm_client):
 
 
 def test_import(tm_client):
-    result = contacts.import_contacts(tm_client, [
-        {"firstname": "Test", "lastname": "Mc Cheer"},
-        {"email": "invalid", "firstname": "Last"},
-    ])
+    result = contacts.import_contacts(
+        tm_client,
+        [
+            {"firstname": "Test", "lastname": "Mc Cheer"},
+            {"email": "invalid", "firstname": "Last"},
+        ],
+    )
     assert result[0].ok is True
     assert result[1].ok is False
     assert result[0].id > 0
@@ -132,18 +150,26 @@ def test_import(tm_client):
 
 
 def test_update_with_optins(tm_client):
-    contact = contacts.create(tm_client, {"email": "john34@test.com", "firstname": "John"})
+    contact = contacts.create(
+        tm_client, {"email": "john34@test.com", "firstname": "John"}
+    )
     assert contact.id != 0
     assert contact.email == "john34@test.com"
     assert len(contact.optins) == 0
 
-    updated = contacts.update(tm_client, contact.id, {
-        "optins": [{
-            "info": {"method": "api", "remarks": "remarks"},
-            "optinid": 1,
-            "status": 7602,
-        }],
-    })
+    updated = contacts.update(
+        tm_client,
+        contact.id,
+        {
+            "optins": [
+                {
+                    "info": {"method": "api", "remarks": "remarks"},
+                    "optinid": 1,
+                    "status": 7602,
+                }
+            ],
+        },
+    )
     assert updated.id == contact.id
     assert len(updated.optins) == 1
     assert updated.optins[0].optinid == 1
@@ -161,10 +187,15 @@ def test_remarks(tm_client):
     assert remark.content == "Hello World"
     assert remark.pinned is False
 
-    updated = contacts.update_remark(tm_client, contact.id, remark.id, {
-        "content": "Hello World 2",
-        "pinned": True,
-    })
+    updated = contacts.update_remark(
+        tm_client,
+        contact.id,
+        remark.id,
+        {
+            "content": "Hello World 2",
+            "pinned": True,
+        },
+    )
     assert updated.content == "Hello World 2"
     assert updated.pinned is True
 

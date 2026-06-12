@@ -14,11 +14,14 @@ def test_batch(tm_client):
     order2 = orders.create(tm_client, {"saleschannelid": 1})
     assert order2.orderid != 0
 
-    orders.batch(tm_client, {
-        "ids": [order.orderid, order2.orderid],
-        "operation": "update",
-        "parameters": {"updatefields": [{"key": "deliveryscenarioid", "value": 1}]},
-    })
+    orders.batch(
+        tm_client,
+        {
+            "ids": [order.orderid, order2.orderid],
+            "operation": "update",
+            "parameters": {"updatefields": [{"key": "deliveryscenarioid", "value": 1}]},
+        },
+    )
 
 
 def test_get(tm_client):
@@ -37,11 +40,15 @@ def test_create(tm_client):
     assert order.orderid != 0
     assert order.saleschannelid == 1
 
-    updated = orders.update(tm_client, order.orderid, {
-        "customerid": 777701,
-        "deliveryscenarioid": 2,
-        "paymentscenarioid": 3,
-    })
+    updated = orders.update(
+        tm_client,
+        order.orderid,
+        {
+            "customerid": 777701,
+            "deliveryscenarioid": 2,
+            "paymentscenarioid": 3,
+        },
+    )
     assert updated.orderid == order.orderid
     assert updated.deliveryscenarioid == 2
     assert updated.paymentscenarioid == 3
@@ -50,23 +57,39 @@ def test_create(tm_client):
     ttps = events.get(tm_client, 777701)
     assert ttps.id != 0
 
-    ticketsadded = orders.add_tickets(tm_client, order.orderid, {
-        "tickets": [
-            {"tickettypepriceid": ttps.prices.contingents[0].pricetypes[0].tickettypepriceid},
-            {"tickettypepriceid": ttps.prices.contingents[0].pricetypes[0].tickettypepriceid},
-        ],
-    })
+    ticketsadded = orders.add_tickets(
+        tm_client,
+        order.orderid,
+        {
+            "tickets": [
+                {
+                    "tickettypepriceid": ttps.prices.contingents[0]
+                    .pricetypes[0]
+                    .tickettypepriceid
+                },
+                {
+                    "tickettypepriceid": ttps.prices.contingents[0]
+                    .pricetypes[0]
+                    .tickettypepriceid
+                },
+            ],
+        },
+    )
     assert len(ticketsadded.order["tickets"]) == 2
 
     orders.confirm(tm_client, order.orderid)
 
     ticket_ids = [ticketsadded.order["tickets"][0]["id"]]
 
-    updated2 = orders.update_tickets(tm_client, order.orderid, {
-        "operation": "setticketholders",
-        "params": {"ticketholderids": [777701]},
-        "tickets": ticket_ids,
-    })
+    updated2 = orders.update_tickets(
+        tm_client,
+        order.orderid,
+        {
+            "operation": "setticketholders",
+            "params": {"ticketholderids": [777701]},
+            "tickets": ticket_ids,
+        },
+    )
     assert updated2.tickets[0].ticketholderid == 777701
 
     deleted = orders.delete_tickets(tm_client, order.orderid, {"tickets": ticket_ids})
@@ -77,29 +100,49 @@ def test_split(tm_client):
     order = orders.create(tm_client, {"saleschannelid": 1})
     assert order.orderid != 0
 
-    orders.update(tm_client, order.orderid, {
-        "customerid": 777701,
-        "deliveryscenarioid": 2,
-        "paymentscenarioid": 3,
-    })
+    orders.update(
+        tm_client,
+        order.orderid,
+        {
+            "customerid": 777701,
+            "deliveryscenarioid": 2,
+            "paymentscenarioid": 3,
+        },
+    )
 
     ttps = events.get(tm_client, 777701)
 
-    ticketsadded = orders.add_tickets(tm_client, order.orderid, {
-        "tickets": [
-            {"tickettypepriceid": ttps.prices.contingents[0].pricetypes[0].tickettypepriceid},
-            {"tickettypepriceid": ttps.prices.contingents[0].pricetypes[0].tickettypepriceid},
-        ],
-    })
+    ticketsadded = orders.add_tickets(
+        tm_client,
+        order.orderid,
+        {
+            "tickets": [
+                {
+                    "tickettypepriceid": ttps.prices.contingents[0]
+                    .pricetypes[0]
+                    .tickettypepriceid
+                },
+                {
+                    "tickettypepriceid": ttps.prices.contingents[0]
+                    .pricetypes[0]
+                    .tickettypepriceid
+                },
+            ],
+        },
+    )
 
     ticket_ids = [ticketsadded.order["tickets"][0]["id"]]
 
     orders.confirm(tm_client, order.orderid)
 
-    split_order = orders.split(tm_client, order.orderid, {
-        "deliveryscenarioid": 3,
-        "tickets": ticket_ids,
-    })
+    split_order = orders.split(
+        tm_client,
+        order.orderid,
+        {
+            "deliveryscenarioid": 3,
+            "tickets": ticket_ids,
+        },
+    )
     assert len(split_order.tickets) == 1
     assert split_order.deliveryscenarioid == 3
     assert split_order.paymentscenarioid == 3

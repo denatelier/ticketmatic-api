@@ -5,14 +5,21 @@ from ticketmatic.widgets import Widgets
 
 
 def test_signing():
-    w = Widgets("club", "142dda885ec6024f934a40c1", "abd2e5893bd447dc7331af1db8df42fdc62fc5c8f9f04784")
+    w = Widgets(
+        "club",
+        "142dda885ec6024f934a40c1",
+        "abd2e5893bd447dc7331af1db8df42fdc62fc5c8f9f04784",
+    )
 
-    url = w.generate_url("addtickets", {
-        "event": "123",
-        "skinid": "25",
-        "returnurl": "http://www.ticketmatic.com",
-        "l": "fr",
-    })
+    url = w.generate_url(
+        "addtickets",
+        {
+            "event": "123",
+            "skinid": "25",
+            "returnurl": "http://www.ticketmatic.com",
+            "l": "fr",
+        },
+    )
 
     # Strip the hostname
     start = url.index("/widgets")
@@ -28,13 +35,19 @@ def test_signing():
 
 @pytest.fixture
 def widgets() -> Widgets:
-    return Widgets("club", "142dda885ec6024f934a40c1", "abd2e5893bd447dc7331af1db8df42fdc62fc5c8f9f04784")
+    return Widgets(
+        "club",
+        "142dda885ec6024f934a40c1",
+        "abd2e5893bd447dc7331af1db8df42fdc62fc5c8f9f04784",
+    )
 
 
 def test_verify_return_url_accepts_valid_signature(widgets: Widgets):
     params = {"event": "123", "orderid": "456"}
     params["accesskey"] = widgets.access_key
-    params["signature"] = widgets._calculate_signature({"event": "123", "orderid": "456"})
+    params["signature"] = widgets._calculate_signature(
+        {"event": "123", "orderid": "456"}
+    )
 
     widgets.verify_return_url(params)  # must not raise
 

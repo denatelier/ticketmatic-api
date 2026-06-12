@@ -19,7 +19,9 @@ def client() -> Client:
     return Client("testaccount", "accesskey", "secretkey")
 
 
-def test_bool_query_params_serialize_as_lowercase_json(client: Client, httpx_mock: HTTPXMock) -> None:
+def test_bool_query_params_serialize_as_lowercase_json(
+    client: Client, httpx_mock: HTTPXMock
+) -> None:
     httpx_mock.add_response(json={"data": [], "nbrofresults": 0})
 
     req = client.new_request("GET", "/{accountname}/contacts")
@@ -33,7 +35,9 @@ def test_bool_query_params_serialize_as_lowercase_json(client: Client, httpx_moc
     assert "includearchived=True" not in url
 
 
-def test_false_query_params_serialize_as_lowercase_json(client: Client, httpx_mock: HTTPXMock) -> None:
+def test_false_query_params_serialize_as_lowercase_json(
+    client: Client, httpx_mock: HTTPXMock
+) -> None:
     httpx_mock.add_response(json={})
 
     req = client.new_request("GET", "/{accountname}/contacts")
@@ -81,7 +85,9 @@ def test_auth_header_is_valid_tm_hmac(client: Client, httpx_mock: HTTPXMock) -> 
     assert sign == expected
 
 
-def test_accept_language_header_sent_when_language_set(client: Client, httpx_mock: HTTPXMock) -> None:
+def test_accept_language_header_sent_when_language_set(
+    client: Client, httpx_mock: HTTPXMock
+) -> None:
     httpx_mock.add_response(json={})
 
     client.set_language("nl")
@@ -92,7 +98,9 @@ def test_accept_language_header_sent_when_language_set(client: Client, httpx_moc
     assert sent.headers["Accept-Language"] == "nl"
 
 
-def test_none_values_stripped_from_json_body(client: Client, httpx_mock: HTTPXMock) -> None:
+def test_none_values_stripped_from_json_body(
+    client: Client, httpx_mock: HTTPXMock
+) -> None:
     httpx_mock.add_response(json={})
 
     req = client.new_request("POST", "/{accountname}/contacts")
@@ -105,7 +113,9 @@ def test_none_values_stripped_from_json_body(client: Client, httpx_mock: HTTPXMo
     assert sent.headers["Content-Type"] == "application/json"
 
 
-def test_dict_query_params_are_json_encoded(client: Client, httpx_mock: HTTPXMock) -> None:
+def test_dict_query_params_are_json_encoded(
+    client: Client, httpx_mock: HTTPXMock
+) -> None:
     httpx_mock.add_response(json={})
 
     req = client.new_request("GET", "/{accountname}/orders")
@@ -117,7 +127,9 @@ def test_dict_query_params_are_json_encoded(client: Client, httpx_mock: HTTPXMoc
     assert sent.url.params["filter"] == '{"status": ["open"]}'
 
 
-def test_json_error_body_maps_to_client_exception(client: Client, httpx_mock: HTTPXMock) -> None:
+def test_json_error_body_maps_to_client_exception(
+    client: Client, httpx_mock: HTTPXMock
+) -> None:
     httpx_mock.add_response(
         status_code=404,
         json={
@@ -135,7 +147,9 @@ def test_json_error_body_maps_to_client_exception(client: Client, httpx_mock: HT
     assert exc_info.value.application_code == "CONTACT_NOT_FOUND"
 
 
-def test_plain_text_error_body_maps_to_client_exception(client: Client, httpx_mock: HTTPXMock) -> None:
+def test_plain_text_error_body_maps_to_client_exception(
+    client: Client, httpx_mock: HTTPXMock
+) -> None:
     httpx_mock.add_response(status_code=500, text="internal server error")
 
     with pytest.raises(ClientException) as exc_info:
@@ -145,7 +159,9 @@ def test_plain_text_error_body_maps_to_client_exception(client: Client, httpx_mo
     assert str(exc_info.value) == "internal server error"
 
 
-def test_429_maps_to_rate_limit_exception(client: Client, httpx_mock: HTTPXMock) -> None:
+def test_429_maps_to_rate_limit_exception(
+    client: Client, httpx_mock: HTTPXMock
+) -> None:
     httpx_mock.add_response(status_code=429, headers={"retry-after": "60"})
 
     with pytest.raises(RateLimitException) as exc_info:

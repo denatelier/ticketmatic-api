@@ -18,13 +18,17 @@ def client() -> Client:
 def test_stream_iterates_ndjson(client: Client, httpx_mock: HTTPXMock) -> None:
     httpx_mock.add_response(text='{"id": 1}\n\n{"id": 2}\n')
 
-    with client.new_request("GET", "/{accountname}/events/1/tickets").stream() as stream:
+    with client.new_request(
+        "GET", "/{accountname}/events/1/tickets"
+    ).stream() as stream:
         items = list(stream)
 
     assert items == [{"id": 1}, {"id": 2}]
 
 
-def test_stream_raises_client_exception_on_http_error(client: Client, httpx_mock: HTTPXMock) -> None:
+def test_stream_raises_client_exception_on_http_error(
+    client: Client, httpx_mock: HTTPXMock
+) -> None:
     httpx_mock.add_response(
         status_code=401,
         json={"code": 401, "message": "Authentication failed"},
@@ -36,7 +40,9 @@ def test_stream_raises_client_exception_on_http_error(client: Client, httpx_mock
     assert exc_info.value.code == 401
 
 
-def test_stream_raises_rate_limit_exception_on_429(client: Client, httpx_mock: HTTPXMock) -> None:
+def test_stream_raises_rate_limit_exception_on_429(
+    client: Client, httpx_mock: HTTPXMock
+) -> None:
     httpx_mock.add_response(status_code=429, headers={"retry-after": "120"})
 
     with pytest.raises(RateLimitException) as exc_info:
