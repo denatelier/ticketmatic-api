@@ -4,6 +4,9 @@ A Python client library for the [Ticketmatic API](https://apps.ticketmatic.com/d
 
 This library is a port of the official [Ticketmatic PHP SDK](https://github.com/ticketmatic/tm-php) (`ticketmatic/phpsdk`) to idiomatic Python. It covers the full Ticketmatic REST API surface: contacts, events, orders, settings, and more.
 
+> [!IMPORTANT]
+> **This project is not affiliated with, endorsed by, or connected to Ticketmatic in any way.** It is an independent, community-maintained library. Ticketmatic is not involved in its development or support. Please direct all questions, bug reports, and issues regarding this library to this project's GitHub page (issue tracker) — do **not** contact Ticketmatic about this project at any time.
+
 ## Requirements
 
 - Python 3.11+
