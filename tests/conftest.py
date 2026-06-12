@@ -33,6 +33,5 @@ def tm_client() -> Client:
         )
 
     server = os.environ.get("TM_TEST_SERVER", "https://qa.ticketmatic.com")
-    Client.server = server
 
-    return Client(account_code, access_key, secret_key)
+    return Client(account_code, access_key, secret_key, server=server)

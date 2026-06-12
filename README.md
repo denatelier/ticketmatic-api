@@ -156,16 +156,34 @@ except ClientException as e:
     print(f"API error {e.code}: {e}")
 ```
 
-### Overriding the Server URL
+### Client Configuration
 
-For testing against a staging environment:
+Each client maintains a pooled HTTP connection, so consecutive API calls
+reuse the same connection. Close the client when you're done, or use it as
+a context manager:
 
 ```python
 from ticketmatic import Client
 
-Client.server = "https://qa.ticketmatic.com"
-client = Client("testaccount", "key", "secret")
+with Client("myaccount", "key", "secret") as client:
+    result = events.get_list(client)
 ```
+
+The server URL (e.g. for a staging environment) and request timeout can be
+set per client:
+
+```python
+client = Client(
+    "testaccount",
+    "key",
+    "secret",
+    server="https://qa.ticketmatic.com",
+    timeout=10.0,  # seconds, default 30
+)
+```
+
+Setting `Client.server = "..."` before creating clients still works and
+changes the default for all clients that don't pass `server=` explicitly.
 
 ## Development
 

@@ -24,6 +24,7 @@ class Stream:
 
     def __init__(
         self,
+        http: httpx.Client,
         method: str,
         url: str,
         headers: dict[str, str],
@@ -32,18 +33,15 @@ class Stream:
         # Marked False only once fully initialized, so close()/__del__ are
         # safe on partially-constructed instances.
         self._closed = True
-        self._client = httpx.Client(timeout=None)
-        try:
-            self._response = self._client.stream(
-                method,
-                url,
-                headers=headers,
-                content=content,
-            )
-            self._stream = self._response.__enter__()
-        except BaseException:
-            self._client.close()
-            raise
+        # Streams are long-lived; override the pool's default read timeout.
+        self._response = http.stream(
+            method,
+            url,
+            headers=headers,
+            content=content,
+            timeout=None,
+        )
+        self._stream = self._response.__enter__()
         self._closed = False
 
         try:
@@ -75,12 +73,15 @@ class Stream:
                 return json.loads(line)
 
     def close(self) -> None:
-        """Close the underlying HTTP connection. Safe to call repeatedly."""
+        """Close the streaming response. Safe to call repeatedly.
+
+        The shared connection pool is owned by the :class:`Client` and is
+        left open.
+        """
         if self._closed:
             return
         self._closed = True
         self._response.__exit__(None, None, None)
-        self._client.close()
 
     def __enter__(self) -> Stream:
         return self

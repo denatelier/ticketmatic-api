@@ -47,12 +47,11 @@ class Request:
         """Execute the request and return the parsed response."""
         url, headers, content = self._prepare()
 
-        response = httpx.request(
+        response = self._client._http.request(
             self._method,
             url,
             headers=headers,
             content=content,
-            timeout=30.0,
         )
         self._check_error(response)
 
@@ -63,7 +62,7 @@ class Request:
     def stream(self) -> Stream:
         """Execute the request and return a streaming iterator."""
         url, headers, content = self._prepare()
-        return Stream(self._method, url, headers, content)
+        return Stream(self._client._http, self._method, url, headers, content)
 
     # ------------------------------------------------------------------
     # Internals
@@ -102,7 +101,7 @@ class Request:
         return url, headers, content
 
     def _generate_url(self) -> str:
-        url = f"{Client.server}/api/{Client.version}{self._url}"
+        url = f"{self._client.server}/api/{self._client.version}{self._url}"
 
         # Substitute path parameters
         for key, value in self._parameters.items():
