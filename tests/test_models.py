@@ -1,12 +1,10 @@
 """Unit tests for model serialization round-trips (no API calls needed)."""
 
-from datetime import datetime, timezone
+from datetime import datetime
 
-from ticketmatic.models.common import Address, BatchResult, BatchResultItem, Timestamp
+from ticketmatic.models.common import Address, BatchResult, Timestamp
 from ticketmatic.models.contact import (
     Contact,
-    ContactOptIn,
-    ContactOptInInfo,
     ContactQuery,
 )
 from ticketmatic.models.event import Event, EventContingent, EventQuery
@@ -14,12 +12,10 @@ from ticketmatic.models.order import Order, OrderTicket, Payment
 from ticketmatic.models.pricing import (
     PriceType,
     TicketFee,
-    TicketfeeRules,
-    TicketfeeSaleschannelRule,
 )
-from ticketmatic.models.product import Product, ProductInstancePricetypeValue
+from ticketmatic.models.product import ProductInstancePricetypeValue
 from ticketmatic.models.seating import SeatingPlan
-from ticketmatic.models.voucher import Voucher, VoucherValidity
+from ticketmatic.models.voucher import Voucher
 
 
 class TestContactRoundTrip:

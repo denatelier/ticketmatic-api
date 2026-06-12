@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 import hmac
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 from urllib.parse import quote
 
@@ -132,7 +132,7 @@ class Request:
         access_key = self._client.access_key
         secret_key = self._client.secret_key
 
-        ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")
+        ts = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%S")
 
         signature = hmac.new(
             secret_key.encode(),

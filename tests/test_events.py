@@ -90,7 +90,7 @@ def test_get_tickets(tm_client):
     assert len(result.data) > 0
 
     with events.get_tickets(tm_client, result.data[0].id) as stream:
-        tickets = list(stream)
+        list(stream)
     # Stream may be empty for some events, just verify it doesn't error
 
 
@@ -104,7 +104,8 @@ def test_lock_unlock_tickets(tm_client):
     result = events.get_list(
         tm_client,
         EventQuery(
-            filter="select id from tm.event where seatingplanid is not null and id < 777800",
+            filter="select id from tm.event "
+            "where seatingplanid is not null and id < 777800",
             limit=1,
             orderby="name",
             output="ids",
@@ -138,7 +139,8 @@ def test_update_seat_rank_for_tickets(tm_client):
     result = events.get_list(
         tm_client,
         EventQuery(
-            filter="select id from tm.event where seatingplanid is not null and id < 777800",
+            filter="select id from tm.event "
+            "where seatingplanid is not null and id < 777800",
             limit=1,
             orderby="name",
             output="ids",

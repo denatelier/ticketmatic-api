@@ -1,6 +1,14 @@
 from __future__ import annotations
+
 from ticketmatic.client import Client
-from ticketmatic.endpoints.settings._crud import *
+from ticketmatic.endpoints.settings._crud import (
+    crud_create,
+    crud_delete,
+    crud_get,
+    crud_get_list,
+    crud_update,
+    make_list_type,
+)
 from ticketmatic.models.contact import ContactTitle, ContactTitleQuery
 
 _URL = "/{accountname}/settings/system/contacttitles"

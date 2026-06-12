@@ -3,13 +3,12 @@
 import pytest
 
 from ticketmatic import ClientException
-from ticketmatic.endpoints.settings import account_parameters, products, vouchers
+from ticketmatic.endpoints.settings import account_parameters, vouchers
 from ticketmatic.endpoints.settings.communication import documents
 from ticketmatic.endpoints.settings.events import event_locations
 from ticketmatic.endpoints.settings.pricing import (
     price_types,
     ticket_fees,
-    order_fee_definitions,
 )
 from ticketmatic.endpoints.settings.seating_plans import seating_plans
 from ticketmatic.endpoints.settings.system import (
@@ -89,11 +88,9 @@ class TestPriceTypes:
         result = price_types.get_list(tm_client)
         assert len(result.data) > 0
 
-        en_name = result.data[0].name
-
         tm_client.set_language("nl")
         result_nl = price_types.get_list(tm_client)
-        nl_name = result_nl.data[0].name
+        assert len(result_nl.data) > 0
 
         # Reset language
         tm_client.language = None

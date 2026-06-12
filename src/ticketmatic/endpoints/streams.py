@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
-
 from ticketmatic.client import Client
 from ticketmatic.models.stream_models import EventstreamRequest, EventstreamResult
 

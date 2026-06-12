@@ -7,7 +7,6 @@ from typing import Any
 
 from ticketmatic.client import Client
 from ticketmatic.json_utils import unpack_array
-from ticketmatic.models.base import Model
 
 
 def make_list_type(item_type: type):

@@ -1,14 +1,21 @@
 from __future__ import annotations
-from typing import Any
+
 from ticketmatic.client import Client
-from ticketmatic.endpoints.settings._crud import *
+from ticketmatic.endpoints.settings._crud import (
+    crud_create,
+    crud_delete,
+    crud_get,
+    crud_get_list,
+    crud_update,
+    make_list_type,
+)
+from ticketmatic.models.order import Flowinfo, Flowsession
 from ticketmatic.models.ticket import (
     Ticketsalesflow,
     TicketsalesflowQuery,
     Ticketsalessetup,
     TicketsalessetupQuery,
 )
-from ticketmatic.models.order import Flowinfo, Flowsession
 
 _URL = "/{accountname}/settings/system/ticketsalesflows"
 _ITEM = "/{accountname}/settings/system/ticketsalesflows/{id}"

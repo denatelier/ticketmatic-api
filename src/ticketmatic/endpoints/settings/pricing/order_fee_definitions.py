@@ -3,7 +3,15 @@ from __future__ import annotations
 from typing import Any
 
 from ticketmatic.client import Client
-from ticketmatic.endpoints.settings._crud import *
+from ticketmatic.endpoints.settings._crud import (
+    crud_create,
+    crud_delete,
+    crud_get,
+    crud_get_list,
+    crud_translate,
+    crud_translations,
+    make_list_type,
+)
 from ticketmatic.models.pricing import OrderFeeDefinition, OrderFeeDefinitionQuery
 
 _URL = "/{accountname}/settings/pricing/orderfeedefinitions"
