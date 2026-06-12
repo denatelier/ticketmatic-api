@@ -104,6 +104,7 @@ class PriceTypeQuery(Model):
 
 # --- Ticket Fee models ---
 
+
 @dataclasses.dataclass
 class TicketfeeSaleschannelRule(Model):
     saleschannelid: int | None = None
@@ -141,6 +142,7 @@ class TicketFeeQuery(Model):
 
 
 # --- Order Fee models ---
+
 
 @dataclasses.dataclass
 class OrderfeeAutoRule(Model):

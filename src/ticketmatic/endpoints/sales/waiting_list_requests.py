@@ -21,7 +21,9 @@ class WaitingListRequestsList:
         )
 
 
-def get_list(client: Client, params: WaitingListRequestQuery | dict | None = None) -> WaitingListRequestsList:
+def get_list(
+    client: Client, params: WaitingListRequestQuery | dict | None = None
+) -> WaitingListRequestsList:
     if params is None or isinstance(params, dict):
         params = WaitingListRequestQuery.from_dict(params or {})
     req = client.new_request("GET", "/{accountname}/sales/waitinglistrequests")
@@ -45,7 +47,9 @@ def create(client: Client, data: WaitingListRequest | dict) -> WaitingListReques
     return WaitingListRequest.from_dict(req.run())
 
 
-def update(client: Client, id: int, data: WaitingListRequest | dict) -> WaitingListRequest:
+def update(
+    client: Client, id: int, data: WaitingListRequest | dict
+) -> WaitingListRequest:
     if isinstance(data, dict):
         data = WaitingListRequest.from_dict(data)
     req = client.new_request("PUT", "/{accountname}/sales/waitinglistrequests/{id}")

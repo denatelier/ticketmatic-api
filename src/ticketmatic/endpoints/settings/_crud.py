@@ -1,4 +1,5 @@
 """Helpers to reduce boilerplate in settings CRUD endpoints."""
+
 from __future__ import annotations
 
 import dataclasses
@@ -29,7 +30,14 @@ def make_list_type(item_type: type):
     return _List
 
 
-def crud_get_list(client: Client, url: str, query_model: type, params, list_type, query_fields: list[str]):
+def crud_get_list(
+    client: Client,
+    url: str,
+    query_model: type,
+    params,
+    list_type,
+    query_fields: list[str],
+):
     if params is None or isinstance(params, dict):
         params = query_model.from_dict(params or {})
     req = client.new_request("GET", url)

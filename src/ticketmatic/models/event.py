@@ -264,6 +264,7 @@ class EventLocationQuery(Model):
 
 # --- Batch event operations ---
 
+
 @dataclasses.dataclass
 class BatchEventUpdateField(Model):
     key: str | None = None

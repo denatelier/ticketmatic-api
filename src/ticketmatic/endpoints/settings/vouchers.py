@@ -24,23 +24,30 @@ _FIELDS = ["typeid", "filter", "includearchived", "lastupdatesince"]
 def get_list(client: Client, params: VoucherQuery | dict | None = None) -> VouchersList:
     return crud_get_list(client, _URL, VoucherQuery, params, VouchersList, _FIELDS)
 
+
 def get(client: Client, id: int) -> Voucher:
     return crud_get(client, _ITEM, id, Voucher)
+
 
 def create(client: Client, data: Voucher | dict) -> Voucher:
     return crud_create(client, _URL, data, Voucher)
 
+
 def update(client: Client, id: int, data: Voucher | dict) -> Voucher:
     return crud_update(client, _ITEM, id, data, Voucher)
+
 
 def delete(client: Client, id: int) -> None:
     crud_delete(client, _ITEM, id)
 
+
 def translations(client: Client, id: int) -> Any:
     return crud_translations(client, f"{_ITEM}/translate", id)
 
+
 def translate(client: Client, id: int, data: dict) -> Any:
     return crud_translate(client, f"{_ITEM}/translate", id, data)
+
 
 def create_codes(client: Client, id: int, data: AddVoucherCodes | dict) -> None:
     if isinstance(data, dict):
@@ -49,6 +56,7 @@ def create_codes(client: Client, id: int, data: AddVoucherCodes | dict) -> None:
     req.add_parameter("id", id)
     req.set_body(data.to_dict())
     req.run()
+
 
 def deactivate_codes(client: Client, id: int, data: AddVoucherCodes | dict) -> None:
     if isinstance(data, dict):

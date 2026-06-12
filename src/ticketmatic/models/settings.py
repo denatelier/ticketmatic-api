@@ -6,8 +6,8 @@ from typing import Any, ClassVar
 
 from ticketmatic.models.base import Model
 
-
 # --- Custom Fields ---
+
 
 @dataclasses.dataclass
 class CustomfieldAvailability(Model):
@@ -62,6 +62,7 @@ class CustomFieldValueQuery(Model):
 
 # --- Delivery Scenarios ---
 
+
 @dataclasses.dataclass
 class DeliveryscenarioAvailability(Model):
     saleschannels: list[int] | None = None
@@ -103,6 +104,7 @@ class DeliveryScenarioQuery(Model):
 
 # --- Documents ---
 
+
 @dataclasses.dataclass
 class DocumentOptions(Model):
     nbrperpage: int | None = None
@@ -132,6 +134,7 @@ class DocumentQuery(Model):
 
 # --- Dupe Detect ---
 
+
 @dataclasses.dataclass
 class DupeDetectCriteria(Model):
     field: str | None = None
@@ -154,6 +157,7 @@ class DupeDetectRuleQuery(Model):
 
 
 # --- Field Definitions ---
+
 
 @dataclasses.dataclass
 class FieldDefinition(Model):
@@ -194,6 +198,7 @@ class FielddefinitionsDataResult(Model):
 
 # --- Filter Definitions ---
 
+
 @dataclasses.dataclass
 class FilterDefinition(Model):
     id: int | None = None
@@ -217,6 +222,7 @@ class FilterDefinitionQuery(Model):
 
 
 # --- Opt-Ins ---
+
 
 @dataclasses.dataclass
 class OptInAvailability(Model):
@@ -247,6 +253,7 @@ class OptInQuery(Model):
 
 # --- Relation Types ---
 
+
 @dataclasses.dataclass
 class RelationType(Model):
     id: int | None = None
@@ -265,6 +272,7 @@ class RelationTypeQuery(Model):
 
 
 # --- Reports ---
+
 
 @dataclasses.dataclass
 class ReportOptions(Model):
@@ -306,6 +314,7 @@ class ReportQuery(Model):
 
 # --- Sales Channels ---
 
+
 @dataclasses.dataclass
 class SalesChannel(Model):
     id: int | None = None
@@ -326,6 +335,7 @@ class SalesChannelQuery(Model):
 
 
 # --- Views ---
+
 
 @dataclasses.dataclass
 class ViewColumn(Model):

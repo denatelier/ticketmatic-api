@@ -85,7 +85,9 @@ def delete(client: Client, id: int) -> None:
     req.run()
 
 
-def get_tickets(client: Client, id: int, params: EventTicketQuery | dict | None = None) -> Stream:
+def get_tickets(
+    client: Client, id: int, params: EventTicketQuery | dict | None = None
+) -> Stream:
     if params is None or isinstance(params, dict):
         params = EventTicketQuery.from_dict(params or {})
     req = client.new_request("GET", "/{accountname}/events/{id}/tickets")
@@ -94,7 +96,9 @@ def get_tickets(client: Client, id: int, params: EventTicketQuery | dict | None 
     return req.stream()
 
 
-def batch_update_tickets(client: Client, id: int, data: list[EventTicket | dict]) -> None:
+def batch_update_tickets(
+    client: Client, id: int, data: list[EventTicket | dict]
+) -> None:
     body = []
     for item in data:
         if isinstance(item, dict):
@@ -124,7 +128,9 @@ def unlock_tickets(client: Client, id: int, data: EventUnlockTickets | dict) -> 
     req.run()
 
 
-def update_seat_rank_for_tickets(client: Client, id: int, data: EventUpdateSeatRankForTickets | dict) -> None:
+def update_seat_rank_for_tickets(
+    client: Client, id: int, data: EventUpdateSeatRankForTickets | dict
+) -> None:
     if isinstance(data, dict):
         data = EventUpdateSeatRankForTickets.from_dict(data)
     req = client.new_request("PUT", "/{accountname}/events/{id}/tickets/seatrank")

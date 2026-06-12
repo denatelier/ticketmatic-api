@@ -215,7 +215,9 @@ def post_pdf(client: Client, id: int, data: TicketsPdfRequest | dict) -> Url:
     return Url.from_dict(req.run())
 
 
-def post_tickets_email_delivery(client: Client, id: int, data: TicketsEmaildeliveryRequest | dict) -> Order:
+def post_tickets_email_delivery(
+    client: Client, id: int, data: TicketsEmaildeliveryRequest | dict
+) -> Order:
     if isinstance(data, dict):
         data = TicketsEmaildeliveryRequest.from_dict(data)
     req = client.new_request("POST", "/{accountname}/orders/{id}/tickets/emaildelivery")
@@ -225,7 +227,9 @@ def post_tickets_email_delivery(client: Client, id: int, data: TicketsEmaildeliv
 
 
 def post_tickets_email_payment_instruction(client: Client, id: int) -> Order:
-    req = client.new_request("POST", "/{accountname}/orders/{id}/tickets/emailpaymentinstruction")
+    req = client.new_request(
+        "POST", "/{accountname}/orders/{id}/tickets/emailpaymentinstruction"
+    )
     req.add_parameter("id", id)
     return Order.from_dict(req.run())
 
@@ -246,14 +250,18 @@ def cancel_payment_request(client: Client, id: int) -> None:
 
 
 def get_document(client: Client, id: int, document_id: str, language: str) -> Url:
-    req = client.new_request("GET", "/{accountname}/orders/{id}/documents/{documentid}/{language}")
+    req = client.new_request(
+        "GET", "/{accountname}/orders/{id}/documents/{documentid}/{language}"
+    )
     req.add_parameter("id", id)
     req.add_parameter("documentid", document_id)
     req.add_parameter("language", language)
     return Url.from_dict(req.run())
 
 
-def import_orders(client: Client, data: list[ImportOrder | dict]) -> list[OrderImportStatus]:
+def import_orders(
+    client: Client, data: list[ImportOrder | dict]
+) -> list[OrderImportStatus]:
     body = []
     for item in data:
         if isinstance(item, dict):

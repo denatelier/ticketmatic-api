@@ -48,6 +48,7 @@ class SubscriberSync(Model):
 
 # --- Waiting List ---
 
+
 @dataclasses.dataclass
 class WaitingListRequestItemTicket(Model):
     tickettypepriceid: int | None = None

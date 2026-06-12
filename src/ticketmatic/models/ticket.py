@@ -60,6 +60,7 @@ class TicketsalesFlowConfig(Model):
         if data is None:
             return None
         from ticketmatic.json_utils import unpack_timestamp
+
         return cls(
             from_=unpack_timestamp(data.get("from")),
             until=unpack_timestamp(data.get("until")),
@@ -69,6 +70,7 @@ class TicketsalesFlowConfig(Model):
 
     def to_dict(self) -> dict[str, Any]:
         from ticketmatic.json_utils import pack_timestamp
+
         result: dict[str, Any] = {}
         if self.from_ is not None:
             result["from"] = pack_timestamp(self.from_)
@@ -117,6 +119,7 @@ class TicketsalessetupQuery(Model):
 
 
 # --- Web Sales Skins ---
+
 
 @dataclasses.dataclass
 class WebSalesSkinConfiguration(Model):

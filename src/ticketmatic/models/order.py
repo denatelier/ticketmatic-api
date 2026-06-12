@@ -317,6 +317,7 @@ class OrderMailTemplateQuery(Model):
 
 # --- Batch order operations ---
 
+
 @dataclasses.dataclass
 class BatchOrderUpdateField(Model):
     key: str | None = None
@@ -337,6 +338,7 @@ class BatchOrderOperation(Model):
 
 
 # --- Import models ---
+
 
 @dataclasses.dataclass
 class ImportBundleTicket(Model):

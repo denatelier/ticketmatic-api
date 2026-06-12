@@ -44,7 +44,9 @@ def get_list(client: Client, params: ContactQuery | dict | None = None) -> Conta
     return ContactsList.from_dict(req.run())
 
 
-def get(client: Client, id: int, params: ContactGetQuery | dict | None = None) -> Contact:
+def get(
+    client: Client, id: int, params: ContactGetQuery | dict | None = None
+) -> Contact:
     if params is None or isinstance(params, dict):
         params = ContactGetQuery.from_dict(params or {})
     req = client.new_request("GET", "/{accountname}/contacts/{id}")
@@ -84,7 +86,9 @@ def batch(client: Client, data: BatchContactOperation | dict) -> None:
     req.run()
 
 
-def import_contacts(client: Client, data: list[Contact | dict]) -> list[ContactImportStatus]:
+def import_contacts(
+    client: Client, data: list[Contact | dict]
+) -> list[ContactImportStatus]:
     body = []
     for item in data:
         if isinstance(item, dict):
@@ -119,7 +123,9 @@ def create_remark(client: Client, id: int, data: ContactRemark | dict) -> Contac
     return ContactRemark.from_dict(req.run())
 
 
-def update_remark(client: Client, id: int, remark_id: str, data: ContactRemark | dict) -> ContactRemark:
+def update_remark(
+    client: Client, id: int, remark_id: str, data: ContactRemark | dict
+) -> ContactRemark:
     if isinstance(data, dict):
         data = ContactRemark.from_dict(data)
     req = client.new_request("PUT", "/{accountname}/contacts/{id}/remarks/{remarkid}")
@@ -130,7 +136,9 @@ def update_remark(client: Client, id: int, remark_id: str, data: ContactRemark |
 
 
 def delete_remark(client: Client, id: int, remark_id: str) -> None:
-    req = client.new_request("DELETE", "/{accountname}/contacts/{id}/remarks/{remarkid}")
+    req = client.new_request(
+        "DELETE", "/{accountname}/contacts/{id}/remarks/{remarkid}"
+    )
     req.add_parameter("id", id)
     req.add_parameter("remarkid", remark_id)
     req.run()

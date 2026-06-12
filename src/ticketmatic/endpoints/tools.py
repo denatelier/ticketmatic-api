@@ -34,7 +34,9 @@ def export(client: Client, data: QueryRequest | dict) -> Any:
     return req.run()
 
 
-def tickets_processed_statistics(client: Client, data: TicketsprocessedRequest | dict) -> list[TicketsprocessedStatistics]:
+def tickets_processed_statistics(
+    client: Client, data: TicketsprocessedRequest | dict
+) -> list[TicketsprocessedStatistics]:
     if isinstance(data, dict):
         data = TicketsprocessedRequest.from_dict(data)
     req = client.new_request("POST", "/{accountname}/tools/ticketsprocessedstatistics")

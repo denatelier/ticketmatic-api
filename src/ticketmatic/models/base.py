@@ -99,6 +99,7 @@ def _coerce(value: Any, hint: Any) -> Any:
 
     # typing.Optional[X] / typing.Union[X, None]
     import typing
+
     if origin is typing.Union:
         args = hint.__args__
         non_none = [a for a in args if a is not type(None)]

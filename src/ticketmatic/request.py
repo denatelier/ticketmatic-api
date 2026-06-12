@@ -91,10 +91,14 @@ class Request:
                 content = json.dumps(body).encode()
                 headers["Content-Type"] = "application/json"
             elif self._body_content_type == "svg":
-                content = self._body if isinstance(self._body, bytes) else self._body.encode()
+                content = (
+                    self._body if isinstance(self._body, bytes) else self._body.encode()
+                )
                 headers["Content-Type"] = "image/svg+xml"
             elif self._body_content_type == "jpg":
-                content = self._body if isinstance(self._body, bytes) else self._body.encode()
+                content = (
+                    self._body if isinstance(self._body, bytes) else self._body.encode()
+                )
                 headers["Content-Type"] = "image/jpeg"
 
         url = self._generate_url()
