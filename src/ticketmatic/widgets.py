@@ -56,7 +56,7 @@ class Widgets:
         sig = params.pop("signature")
         expected = self._calculate_signature(params)
 
-        if expected != sig:
+        if not hmac.compare_digest(expected, sig):
             raise VerifyException("Signature mismatch")
 
     def _calculate_signature(self, params: dict[str, str]) -> str:

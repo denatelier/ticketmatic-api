@@ -106,14 +106,16 @@ class Request:
 
         # Substitute path parameters
         for key, value in self._parameters.items():
-            url = url.replace(f"{{{key}}}", value)
-        url = url.replace("{accountname}", self._client.account_code)
+            url = url.replace(f"{{{key}}}", quote(value, safe=""))
+        url = url.replace("{accountname}", quote(self._client.account_code, safe=""))
 
         # Append query string
         if self._query:
             parts: list[str] = []
             for key, value in self._query.items():
-                if isinstance(value, (dict, list)):
+                if isinstance(value, bool):
+                    parts.append(f"{key}={'true' if value else 'false'}")
+                elif isinstance(value, (dict, list)):
                     parts.append(f"{key}={quote(json.dumps(value))}")
                 else:
                     parts.append(f"{key}={quote(str(value))}")

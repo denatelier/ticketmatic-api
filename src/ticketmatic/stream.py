@@ -5,6 +5,8 @@ from typing import Any, Iterator
 
 import httpx
 
+from ticketmatic.exceptions import ClientException, RateLimitException
+
 
 class Stream:
     """Iterator over a newline-delimited JSON streaming response.
@@ -14,6 +16,10 @@ class Stream:
         stream = request.stream()
         for item in stream:
             print(item)
+
+    Raises :class:`~ticketmatic.exceptions.ClientException` or
+    :class:`~ticketmatic.exceptions.RateLimitException` if the API
+    responds with an error status.
     """
 
     def __init__(
@@ -23,15 +29,38 @@ class Stream:
         headers: dict[str, str],
         content: bytes | None,
     ) -> None:
+        # Marked False only once fully initialized, so close()/__del__ are
+        # safe on partially-constructed instances.
+        self._closed = True
         self._client = httpx.Client(timeout=None)
-        self._response = self._client.stream(
-            method,
-            url,
-            headers=headers,
-            content=content,
-        )
-        self._stream = self._response.__enter__()
+        try:
+            self._response = self._client.stream(
+                method,
+                url,
+                headers=headers,
+                content=content,
+            )
+            self._stream = self._response.__enter__()
+        except BaseException:
+            self._client.close()
+            raise
+        self._closed = False
+
+        try:
+            self._check_error()
+        except BaseException:
+            self.close()
+            raise
+
         self._lines: Iterator[str] = self._stream.iter_lines()
+
+    def _check_error(self) -> None:
+        if self._stream.status_code == 429:
+            backoff = int(self._stream.headers.get("retry-after", "0"))
+            raise RateLimitException(backoff)
+        if self._stream.status_code != 200:
+            self._stream.read()
+            raise ClientException(self._stream.status_code, self._stream.text)
 
     def __iter__(self) -> Stream:
         return self
@@ -46,7 +75,10 @@ class Stream:
                 return json.loads(line)
 
     def close(self) -> None:
-        """Close the underlying HTTP connection."""
+        """Close the underlying HTTP connection. Safe to call repeatedly."""
+        if self._closed:
+            return
+        self._closed = True
         self._response.__exit__(None, None, None)
         self._client.close()
 
@@ -57,4 +89,5 @@ class Stream:
         self.close()
 
     def __del__(self) -> None:
-        self.close()
+        if not getattr(self, "_closed", True):
+            self.close()
