@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "ticketmatic"
+name = "ticketmatic-api"
 version = "1.0.0"
 description = "Python API client for the Ticketmatic API"
 requires-python = ">=3.11"

@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-`ticketmatic` is a Python client library for the [Ticketmatic REST API](https://apps.ticketmatic.com/docs/api). It is an **idiomatic Python port of the official [Ticketmatic PHP SDK](https://github.com/ticketmatic/tm-php)** (`ticketmatic/phpsdk`, build 1.0.122). When adding or changing endpoints/models, mirror the PHP SDK's structure, naming, and URL paths — it is the reference implementation. The project is community-maintained and **not affiliated with Ticketmatic**.
+`ticketmatic-api` is a Python client library for the [Ticketmatic REST API](https://apps.ticketmatic.com/docs/api). It is an **idiomatic Python port of the official [Ticketmatic PHP SDK](https://github.com/ticketmatic/tm-php)** (`ticketmatic/phpsdk`, build 1.0.122). When adding or changing endpoints/models, mirror the PHP SDK's structure, naming, and URL paths — it is the reference implementation. The project is community-maintained and **not affiliated with Ticketmatic**.
+
+Note the name split: the **distribution** is `ticketmatic-api` (the `[project].name` in `pyproject.toml`, used for `pip install`), while the **importable package** stays `ticketmatic` (`src/ticketmatic/`, `from ticketmatic import Client`). Keep the package directory named `ticketmatic`.
 
 Requires Python 3.11+. The only runtime dependency is `httpx`.
 

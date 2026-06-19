@@ -1,6 +1,9 @@
-# ticketmatic
+# ticketmatic-api
 
 A Python client library for the [Ticketmatic API](https://apps.ticketmatic.com/docs/api).
+
+The distribution is published as `ticketmatic-api`, but it installs the `ticketmatic`
+package, so imports use the short name (e.g. `from ticketmatic import Client`).
 
 This library is a port of the official [Ticketmatic PHP SDK](https://github.com/ticketmatic/tm-php) (`ticketmatic/phpsdk`) to idiomatic Python. It covers the full Ticketmatic REST API surface: contacts, events, orders, settings, and more.
 
@@ -15,14 +18,14 @@ This library is a port of the official [Ticketmatic PHP SDK](https://github.com/
 ## Installation
 
 ```bash
-pip install ticketmatic
+pip install ticketmatic-api
 ```
 
 Or install from source:
 
 ```bash
 git clone <repo-url>
-cd tm-python
+cd ticketmatic-api
 pip install -e .
 ```
 
