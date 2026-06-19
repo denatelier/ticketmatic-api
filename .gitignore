@@ -8,3 +8,7 @@ build/
 .pytest_cache/
 *.egg
 .env
+
+# Sphinx documentation
+docs/_build/
+docs/api/_autosummary/
