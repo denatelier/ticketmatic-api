@@ -1,3 +1,5 @@
+"""Base class and helpers for the JSON-serializable data models."""
+
 from __future__ import annotations
 
 import dataclasses

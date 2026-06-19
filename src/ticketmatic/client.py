@@ -1,3 +1,5 @@
+"""The Ticketmatic API client and its HTTP connection handling."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -55,11 +57,24 @@ class Client:
         self._http = httpx.Client(timeout=timeout)
 
     def new_request(self, method: str, url: str) -> Request:
+        """Create a new :class:`~ticketmatic.request.Request` bound to this client.
+
+        :param method: HTTP method (``GET``, ``POST``, ``PUT``, ``DELETE``).
+        :param url: API path, with placeholders such as ``{accountname}`` and
+            ``{id}`` that are filled in when the request is executed.
+        :returns: A request ready to have parameters, query values and a body
+            added before being run.
+        """
         from ticketmatic.request import Request
 
         return Request(self, method, url)
 
     def set_language(self, lang: str) -> None:
+        """Set the language for translated content returned by the API.
+
+        :param lang: A language code (for example ``"en"`` or ``"nl"``) sent as
+            the ``Accept-Language`` header on subsequent requests.
+        """
         self.language = lang
 
     def close(self) -> None:
@@ -67,7 +82,9 @@ class Client:
         self._http.close()
 
     def __enter__(self) -> Client:
+        """Enter the runtime context and return the client itself."""
         return self
 
     def __exit__(self, *exc: object) -> None:
+        """Exit the runtime context, closing the connection pool."""
         self.close()

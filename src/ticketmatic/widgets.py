@@ -1,3 +1,5 @@
+"""Signing of widget URLs and verification of widget return URLs."""
+
 from __future__ import annotations
 
 import hashlib

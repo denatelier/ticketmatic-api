@@ -1,3 +1,5 @@
+"""Helpers for (de)serializing JSON values used by the models."""
+
 from __future__ import annotations
 
 from datetime import UTC, datetime

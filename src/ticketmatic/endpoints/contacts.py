@@ -1,3 +1,5 @@
+"""Contact manipulation operations."""
+
 from __future__ import annotations
 
 import dataclasses
@@ -18,11 +20,18 @@ from ticketmatic.models.contact import (
 
 @dataclasses.dataclass
 class ContactsList:
+    """Paged list of :class:`~ticketmatic.models.contact.Contact` objects."""
+
     data: list[Contact]
+    """Result data."""
     nbrofresults: int
+    """Total number of results available without considering limit and offset,
+    useful for paging.
+    """
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> ContactsList:
+        """Construct a :class:`ContactsList` from a raw API response dict."""
         return cls(
             data=unpack_array(Contact, data.get("data", [])),
             nbrofresults=int(data.get("nbrofresults", 0)),
@@ -30,6 +39,12 @@ class ContactsList:
 
 
 def get_list(client: Client, params: ContactQuery | dict | None = None) -> ContactsList:
+    """Get a list of contacts.
+
+    :param client: Ticketmatic API client.
+    :param params: Optional query parameters.
+    :returns: A :class:`ContactsList` with paged results.
+    """
     if params is None or isinstance(params, dict):
         params = ContactQuery.from_dict(params or {})
     req = client.new_request("GET", "/{accountname}/contacts")
@@ -47,6 +62,16 @@ def get_list(client: Client, params: ContactQuery | dict | None = None) -> Conta
 def get(
     client: Client, id: int, params: ContactGetQuery | dict | None = None
 ) -> Contact:
+    """Get a single contact.
+
+    To retrieve a contact based on the e-mail address, pass ``0`` as the id
+    and supply an ``email`` parameter.
+
+    :param client: Ticketmatic API client.
+    :param id: Contact ID (pass ``0`` to look up by e-mail).
+    :param params: Optional query parameters (e.g. ``email``).
+    :returns: The requested :class:`~ticketmatic.models.contact.Contact`.
+    """
     if params is None or isinstance(params, dict):
         params = ContactGetQuery.from_dict(params or {})
     req = client.new_request("GET", "/{accountname}/contacts/{id}")
@@ -56,6 +81,12 @@ def get(
 
 
 def create(client: Client, data: Contact | dict) -> Contact:
+    """Create a new contact.
+
+    :param client: Ticketmatic API client.
+    :param data: Contact data to create.
+    :returns: The newly created :class:`~ticketmatic.models.contact.Contact`.
+    """
     if isinstance(data, dict):
         data = Contact.from_dict(data)
     req = client.new_request("POST", "/{accountname}/contacts")
@@ -64,6 +95,13 @@ def create(client: Client, data: Contact | dict) -> Contact:
 
 
 def update(client: Client, id: int, data: Contact | dict) -> Contact:
+    """Update a contact.
+
+    :param client: Ticketmatic API client.
+    :param id: Contact ID.
+    :param data: Updated contact data.
+    :returns: The updated :class:`~ticketmatic.models.contact.Contact`.
+    """
     if isinstance(data, dict):
         data = Contact.from_dict(data)
     req = client.new_request("PUT", "/{accountname}/contacts/{id}")
@@ -73,12 +111,34 @@ def update(client: Client, id: int, data: Contact | dict) -> Contact:
 
 
 def delete(client: Client, id: int) -> None:
+    """Remove a contact.
+
+    Contacts are archivable: this call will not actually delete the object
+    from the database. Instead it will mark the contact as deleted, which
+    means it will not show up anymore in most places.
+
+    :param client: Ticketmatic API client.
+    :param id: Contact ID.
+    """
     req = client.new_request("DELETE", "/{accountname}/contacts/{id}")
     req.add_parameter("id", id)
     req.run()
 
 
 def batch(client: Client, data: BatchContactOperation | dict) -> None:
+    """Apply batch operations to a set of contacts.
+
+    The parameters required are specific to the type of operation. The
+    operation will be applied to the contacts with the given IDs (up to
+    1000 per call).
+
+    Supported operations include ``addrelationtypes``,
+    ``removerelationtypes``, ``delete``, ``subscribe``, ``unsubscribe``,
+    ``sendselection``, ``update``, and ``merge``.
+
+    :param client: Ticketmatic API client.
+    :param data: Batch operation descriptor.
+    """
     if isinstance(data, dict):
         data = BatchContactOperation.from_dict(data)
     req = client.new_request("POST", "/{accountname}/contacts/batch")
@@ -89,6 +149,15 @@ def batch(client: Client, data: BatchContactOperation | dict) -> None:
 def import_contacts(
     client: Client, data: list[Contact | dict]
 ) -> list[ContactImportStatus]:
+    """Import contacts.
+
+    Up to 1000 contacts can be sent per call.
+
+    :param client: Ticketmatic API client.
+    :param data: List of contacts to import.
+    :returns: List of
+        :class:`~ticketmatic.models.contact.ContactImportStatus` results.
+    """
     body = []
     for item in data:
         if isinstance(item, dict):
@@ -100,6 +169,18 @@ def import_contacts(
 
 
 def reserve(client: Client, data: ContactIdReservation | dict) -> ContactIdReservation:
+    """Reserve contact IDs.
+
+    Importing contacts with the specified IDs is only possible when those
+    IDs fall in the reserved ID range. Use this call to reserve a range of
+    contact IDs. Any unused ID lower than or equal to the specified ID will
+    be reserved. New contacts will receive IDs higher than the specified ID.
+
+    :param client: Ticketmatic API client.
+    :param data: ID reservation request.
+    :returns: The resulting
+        :class:`~ticketmatic.models.contact.ContactIdReservation`.
+    """
     if isinstance(data, dict):
         data = ContactIdReservation.from_dict(data)
     req = client.new_request("POST", "/{accountname}/contacts/import/reserve")
@@ -108,6 +189,15 @@ def reserve(client: Client, data: ContactIdReservation | dict) -> ContactIdReser
 
 
 def get_remark(client: Client, id: int, remark_id: str) -> ContactRemark:
+    """Get a remark.
+
+    Gets a specific remark for this contact.
+
+    :param client: Ticketmatic API client.
+    :param id: Contact ID.
+    :param remark_id: Remark ID.
+    :returns: The requested :class:`~ticketmatic.models.contact.ContactRemark`.
+    """
     req = client.new_request("GET", "/{accountname}/contacts/{id}/remarks/{remarkid}")
     req.add_parameter("id", id)
     req.add_parameter("remarkid", remark_id)
@@ -115,6 +205,15 @@ def get_remark(client: Client, id: int, remark_id: str) -> ContactRemark:
 
 
 def create_remark(client: Client, id: int, data: ContactRemark | dict) -> ContactRemark:
+    """Create a remark.
+
+    Creates a remark for this contact.
+
+    :param client: Ticketmatic API client.
+    :param id: Contact ID.
+    :param data: Remark data.
+    :returns: The created :class:`~ticketmatic.models.contact.ContactRemark`.
+    """
     if isinstance(data, dict):
         data = ContactRemark.from_dict(data)
     req = client.new_request("POST", "/{accountname}/contacts/{id}/remarks")
@@ -126,6 +225,16 @@ def create_remark(client: Client, id: int, data: ContactRemark | dict) -> Contac
 def update_remark(
     client: Client, id: int, remark_id: str, data: ContactRemark | dict
 ) -> ContactRemark:
+    """Update a remark.
+
+    Updates a specific remark for this contact.
+
+    :param client: Ticketmatic API client.
+    :param id: Contact ID.
+    :param remark_id: Remark ID.
+    :param data: Updated remark data.
+    :returns: The updated :class:`~ticketmatic.models.contact.ContactRemark`.
+    """
     if isinstance(data, dict):
         data = ContactRemark.from_dict(data)
     req = client.new_request("PUT", "/{accountname}/contacts/{id}/remarks/{remarkid}")
@@ -136,6 +245,14 @@ def update_remark(
 
 
 def delete_remark(client: Client, id: int, remark_id: str) -> None:
+    """Delete a remark.
+
+    Deletes a specific remark for this contact.
+
+    :param client: Ticketmatic API client.
+    :param id: Contact ID.
+    :param remark_id: Remark ID.
+    """
     req = client.new_request(
         "DELETE", "/{accountname}/contacts/{id}/remarks/{remarkid}"
     )

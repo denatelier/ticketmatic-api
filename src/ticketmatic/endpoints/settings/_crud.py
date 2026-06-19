@@ -10,7 +10,12 @@ from ticketmatic.json_utils import unpack_array
 
 
 def make_list_type(item_type: type):
-    """Dynamically create a dataclass for list results."""
+    """Dynamically create a ``{name}List`` dataclass for a paged list result.
+
+    :param item_type: The model class of the items in the list.
+    :returns: A dataclass with ``data`` and ``nbrofresults`` fields and a
+        ``from_dict`` classmethod that deserializes the API response.
+    """
 
     @dataclasses.dataclass
     class _List:

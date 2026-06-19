@@ -1,3 +1,5 @@
+"""Construction, signing and execution of a single Ticketmatic API request."""
+
 from __future__ import annotations
 
 import hashlib
