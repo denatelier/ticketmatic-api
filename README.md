@@ -1,8 +1,13 @@
 # ticketmatic-api
 
+[![PyPI](https://img.shields.io/pypi/v/ticketmatic-api)](https://pypi.org/project/ticketmatic-api/)
+[![Python versions](https://img.shields.io/pypi/pyversions/ticketmatic-api)](https://pypi.org/project/ticketmatic-api/)
+[![Documentation](https://img.shields.io/badge/docs-read%20the%20docs-blue)](https://denatelier-ticketmatic-api.readthedocs-hosted.com)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](https://github.com/denatelier/ticketmatic-api/blob/master/LICENSE)
+
 A Python client library for the [Ticketmatic API](https://apps.ticketmatic.com/docs/api).
 
-**Documentation:** https://denatelier-ticketmatic-api.readthedocs-hosted.com
+📖 **Full documentation: [denatelier-ticketmatic-api.readthedocs-hosted.com](https://denatelier-ticketmatic-api.readthedocs-hosted.com)**
 
 The distribution is published as `ticketmatic-api`, but it installs the `ticketmatic`
 package, so imports use the short name (e.g. `from ticketmatic import Client`).
@@ -11,6 +16,15 @@ This library is a port of the official [Ticketmatic PHP SDK](https://github.com/
 
 > [!IMPORTANT]
 > **This project is not affiliated with, endorsed by, or connected to Ticketmatic in any way.** It is an independent, community-maintained library. Ticketmatic is not involved in its development or support. Please direct all questions, bug reports, and issues regarding this library to this project's GitHub page (issue tracker) — do **not** contact Ticketmatic about this project at any time.
+
+## Documentation
+
+The complete documentation lives at **[denatelier-ticketmatic-api.readthedocs-hosted.com](https://denatelier-ticketmatic-api.readthedocs-hosted.com)**:
+
+- [Installation](https://denatelier-ticketmatic-api.readthedocs-hosted.com/en/latest/guide/installation.html) and [Configuration](https://denatelier-ticketmatic-api.readthedocs-hosted.com/en/latest/guide/configuration.html)
+- [Core concepts](https://denatelier-ticketmatic-api.readthedocs-hosted.com/en/latest/guide/concepts.html), [Error handling](https://denatelier-ticketmatic-api.readthedocs-hosted.com/en/latest/guide/error-handling.html), [Streaming](https://denatelier-ticketmatic-api.readthedocs-hosted.com/en/latest/guide/streaming.html) and [Widgets](https://denatelier-ticketmatic-api.readthedocs-hosted.com/en/latest/guide/widgets.html)
+- [Examples](https://denatelier-ticketmatic-api.readthedocs-hosted.com/en/latest/examples.html) — a full order-to-ticket walkthrough
+- [API reference](https://denatelier-ticketmatic-api.readthedocs-hosted.com/en/latest/api/index.html) — every endpoint and model
 
 ## Requirements
 
@@ -26,7 +40,7 @@ pip install ticketmatic-api
 Or install from source:
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/denatelier/ticketmatic-api.git
 cd ticketmatic-api
 pip install -e .
 ```
