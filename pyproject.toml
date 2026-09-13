@@ -27,6 +27,10 @@ docs = [
 [tool.hatch.build.targets.wheel]
 packages = ["src/ticketmatic"]
 
+[tool.hatch.build.targets.sdist]
+# Keep repo tooling out of the source distribution.
+exclude = [".github", ".idea", ".claude", ".readthedocs.yaml", ".venv"]
+
 [tool.black]
 target-version = ["py311", "py312", "py313"]
 

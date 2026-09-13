@@ -204,6 +204,22 @@ pytest tests/test_models.py tests/test_widgets.py
 TM_TEST_ACCOUNTCODE=xxx TM_TEST_ACCESSKEY=xxx TM_TEST_SECRETKEY=xxx pytest tests/ -m integration
 ```
 
+### Releasing
+
+Releases are published to [PyPI](https://pypi.org/project/ticketmatic-api/) by
+the `Publish` GitHub Actions workflow whenever a `v*` tag is pushed. The tag
+must match the `version` in `pyproject.toml`:
+
+```bash
+# 1. bump `version` in pyproject.toml and commit
+# 2. tag and push
+git tag v1.0.1
+git push origin v1.0.1
+```
+
+The workflow runs the unit tests and linters, builds the sdist and wheel,
+uploads them to PyPI via trusted publishing, and creates a GitHub Release.
+
 ## Credits
 
 This library is a Python port of the [Ticketmatic PHP SDK](https://github.com/ticketmatic/tm-php) (`ticketmatic/phpsdk`, build 1.0.122) by [Ticketmatic BVBA](https://www.ticketmatic.com/). The PHP SDK served as the reference implementation for all API endpoints, data models, and authentication logic. Full credit to the Ticketmatic team for the original design and documentation.

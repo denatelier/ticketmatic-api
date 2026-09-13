@@ -35,6 +35,10 @@ Integration tests skip automatically when credentials are absent, so plain `pyte
 
 ruff config: line-length 88, target py311, rule sets `E,W,F,I,UP,B,C4,SIM` (see `pyproject.toml`).
 
+## Releasing
+
+Pushing a `v*` tag triggers `.github/workflows/publish.yml`: unit tests + lint on 3.11–3.13, a check that the tag equals `[project].version` in `pyproject.toml`, build, upload to PyPI via trusted publishing (the `pypi` GitHub environment, no stored token), then a GitHub Release. Bump the version in `pyproject.toml` **before** tagging; a mismatch fails the build job.
+
 ## Architecture
 
 The library is layered: **Client → Request → Stream**, with **endpoint functions** wrapping requests and **Model dataclasses** handling JSON conversion. Understanding these four pieces explains how any call flows end-to-end.
