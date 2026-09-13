@@ -36,7 +36,7 @@ class Client:
 
     server: str = "https://apps.ticketmatic.com"
     version: str = "1"
-    BUILD: str = "1.0.1"
+    BUILD: str = "1.0.2"
 
     def __init__(
         self,

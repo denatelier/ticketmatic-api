@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ticketmatic-api"
-version = "1.0.1"
+version = "1.0.2"
 description = "Python API client for the Ticketmatic API"
 readme = "README.md"
 requires-python = ">=3.11"
