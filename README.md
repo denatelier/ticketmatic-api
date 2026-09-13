@@ -228,4 +228,4 @@ This project was created with the help of [Claude Code](https://claude.ai/code) 
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License — see [LICENSE](https://github.com/denatelier/ticketmatic-api/blob/master/LICENSE) for details.
