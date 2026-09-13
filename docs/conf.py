@@ -68,3 +68,4 @@ intersphinx_mapping = {
 html_theme = "furo"
 html_static_path = ["_static"]
 html_title = f"ticketmatic-api {release}"
+html_baseurl = "https://denatelier-ticketmatic-api.readthedocs-hosted.com/en/latest/"

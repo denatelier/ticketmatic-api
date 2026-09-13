@@ -33,6 +33,7 @@ dependencies = [
 
 [project.urls]
 Homepage = "https://github.com/denatelier/ticketmatic-api"
+Documentation = "https://denatelier-ticketmatic-api.readthedocs-hosted.com"
 Repository = "https://github.com/denatelier/ticketmatic-api"
 Issues = "https://github.com/denatelier/ticketmatic-api/issues"
 Changelog = "https://github.com/denatelier/ticketmatic-api/releases"

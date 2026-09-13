@@ -2,6 +2,8 @@
 
 A Python client library for the [Ticketmatic API](https://apps.ticketmatic.com/docs/api).
 
+**Documentation:** https://denatelier-ticketmatic-api.readthedocs-hosted.com
+
 The distribution is published as `ticketmatic-api`, but it installs the `ticketmatic`
 package, so imports use the short name (e.g. `from ticketmatic import Client`).
 
