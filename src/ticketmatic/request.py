@@ -13,6 +13,7 @@ import httpx
 
 from ticketmatic.client import Client
 from ticketmatic.exceptions import ClientException, RateLimitException
+from ticketmatic.models.base import Model
 from ticketmatic.stream import Stream
 
 
@@ -118,6 +119,8 @@ class Request:
         if self._query:
             parts: list[str] = []
             for key, value in self._query.items():
+                if isinstance(value, Model):
+                    value = value.to_dict()
                 if isinstance(value, bool):
                     parts.append(f"{key}={'true' if value else 'false'}")
                 elif isinstance(value, (dict, list)):

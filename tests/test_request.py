@@ -12,6 +12,7 @@ from pytest_httpx import HTTPXMock
 
 from ticketmatic.client import Client
 from ticketmatic.exceptions import ClientException, RateLimitException
+from ticketmatic.models.event import EventContext, EventQuery
 
 
 @pytest.fixture
@@ -125,6 +126,39 @@ def test_dict_query_params_are_json_encoded(
     sent = httpx_mock.get_request()
     assert sent is not None
     assert sent.url.params["filter"] == '{"status": ["open"]}'
+
+
+def test_model_query_params_are_json_encoded(
+    client: Client, httpx_mock: HTTPXMock
+) -> None:
+    httpx_mock.add_response(json={})
+
+    query = EventQuery.from_dict(
+        {"simplefilter": {"status": [19002]}, "orderby": "startts"}
+    )
+    req = client.new_request("GET", "/{accountname}/events")
+    req.add_query("simplefilter", query.simplefilter)
+    req.add_query("orderby", query.orderby)
+    req.run()
+
+    sent = httpx_mock.get_request()
+    assert sent is not None
+    assert json.loads(sent.url.params["simplefilter"]) == {"status": [19002]}
+    assert sent.url.params["orderby"] == "startts"
+
+
+def test_model_query_params_omit_none_fields(
+    client: Client, httpx_mock: HTTPXMock
+) -> None:
+    httpx_mock.add_response(json={})
+
+    req = client.new_request("GET", "/{accountname}/events")
+    req.add_query("context", EventContext(saleschannelid=1))
+    req.run()
+
+    sent = httpx_mock.get_request()
+    assert sent is not None
+    assert json.loads(sent.url.params["context"]) == {"saleschannelid": 1}
 
 
 def test_json_error_body_maps_to_client_exception(
